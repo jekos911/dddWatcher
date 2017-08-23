@@ -10,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.jekos.dddwatcher.BuildConfig;
 import com.jekos.dddwatcher.R;
 import com.jekos.dddwatcher.api.interfaces.DribbbleShotsInterface;
 import com.jekos.dddwatcher.api.servicegenerators.MyShotsServiceGenerator;
+import com.jekos.dddwatcher.generator.TextViewTagGenerator;
 import com.jekos.dddwatcher.models.Shot;
 
 import com.jekos.dddwatcher.recyclerutil.PaginationScrollListner;
