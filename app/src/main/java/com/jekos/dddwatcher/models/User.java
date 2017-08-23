@@ -16,4 +16,48 @@ public class User {
     private String followings_count;
     private String likes_count;
     private String likes_received_count;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getHtml_url() {
+        return html_url;
+    }
+
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getFollowers_count() {
+        return followers_count;
+    }
+
+    public String getFollowings_count() {
+        return followings_count;
+    }
+
+    public String getLikes_count() {
+        return likes_count;
+    }
+
+    public String getLikes_received_count() {
+        return likes_received_count;
+    }
 }

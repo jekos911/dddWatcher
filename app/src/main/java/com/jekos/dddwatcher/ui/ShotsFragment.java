@@ -19,6 +19,7 @@ import com.jekos.dddwatcher.api.servicegenerators.MyShotsServiceGenerator;
 import com.jekos.dddwatcher.models.Shot;
 
 import com.jekos.dddwatcher.recyclerutil.PaginationScrollListner;
+import com.jekos.dddwatcher.recyclerutil.ShotClickListner;
 import com.jekos.dddwatcher.recyclerutil.ShotsAdapter;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class ShotsFragment extends Fragment {
         View view = inflater.inflate(R.layout.shots_fragment,container,false);
         recycler = (RecyclerView) view.findViewById(R.id.recyclerShots);
         progressBar = (ProgressBar) view.findViewById(R.id.main_progress);
-        shotsAdapter = new ShotsAdapter(getActivity());
+        shotsAdapter = new ShotsAdapter((ShotClickListner) getActivity());
         linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recycler.setLayoutManager(linearLayoutManager);
         recycler.setItemAnimator(new DefaultItemAnimator());

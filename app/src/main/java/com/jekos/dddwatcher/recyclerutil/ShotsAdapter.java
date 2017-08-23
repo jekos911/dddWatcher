@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jekos.dddwatcher.R;
 import com.jekos.dddwatcher.models.Shot;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +29,13 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private boolean isLoadingAdded = false;
     private List<Shot> shotList = null;
-    Context context;
 
-    public ShotsAdapter(Context context) {
+    private ShotClickListner clickListner;
+
+    public ShotsAdapter(ShotClickListner clickListner) {
         this.shotList = new ArrayList<>();
-        this.context = context;
+        this.clickListner = clickListner;
+
     }
 
     @Override
@@ -41,14 +44,29 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case ITEM:
                 final ShotsViewHolder shotsVH = (ShotsViewHolder) holder;
                 final Shot shot = shotList.get(position);
-                if (shot.isAnimated())
-                    Picasso.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
-                else
-                    Picasso.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
+
+                if (shot.isAnimated()) {
+                    Glide.with(shotsVH.imageShot.getContext())
+                            .load(shot.getImages().get("normal"))
+                            .into(shotsVH.imageShot);
+                }
+                else {
+                    Glide.with(shotsVH.imageShot.getContext())
+                            .load(shot.getImages().get("hidpi"))
+                            .into(shotsVH.imageShot);
+                }
+                Glide.with(shotsVH.imageShot.getContext())
+                        .load(shot.getUser().getAvatar_url())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(shotsVH.userAvatar);
+                shotsVH.userName.setText(shot.getUser().getUsername());
                 shotsVH.titleShot.setText(shot.getTitle());
                 shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
                 shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));
                 shotsVH.views.setText(Integer.toString(shot.getViews_count()));
+                shotsVH.clickListner = clickListner;
+                shotsVH.shot = shot;
+                shotsVH.isGif.setVisibility(shot.isAnimated()?View.VISIBLE:View.INVISIBLE);
                 break;
             case LOADING:
 //                Do nothing
@@ -140,22 +158,5 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         View v1 = inflater.inflate(R.layout.shots_item, parent, false);
         viewHolder = new ShotsViewHolder(v1);
         return viewHolder;
-    }
-
-    private class ImageLoadedCallback implements Callback {
-        ProgressBar progressBar;
-
-        public  ImageLoadedCallback(){
-        }
-
-        @Override
-        public void onSuccess() {
-
-        }
-
-        @Override
-        public void onError() {
-
-        }
     }
 }

@@ -20,6 +20,7 @@ public class Shot {
     private List<String> tags;
     private HashMap<String,String> images;
     private boolean animated;
+    private User user;
 
     public int getId() {
         return id;
@@ -59,6 +60,10 @@ public class Shot {
 
     public HashMap<String, String> getImages() {
         return images;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public boolean isAnimated() {
