@@ -1,19 +1,16 @@
 package com.jekos.dddwatcher.recyclerutil;
 
-import android.content.Context;
+
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jekos.dddwatcher.R;
-import com.jekos.dddwatcher.generator.TextViewTagGenerator;
 import com.jekos.dddwatcher.models.Shot;
 
 
@@ -62,7 +59,7 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         .load(shot.getUser().getAvatar_url())
                         .apply(RequestOptions.circleCropTransform())
                         .into(shotsVH.userAvatar);
-                shotsVH.userName.setText(shot.getUser().getUsername());
+                shotsVH.userName.setText(shot.getUser().getName());
                 shotsVH.titleShot.setText(shot.getTitle());
                 shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
                 shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));

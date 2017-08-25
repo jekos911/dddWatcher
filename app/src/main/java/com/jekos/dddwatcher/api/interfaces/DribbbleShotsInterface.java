@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -15,4 +16,7 @@ import retrofit2.http.Query;
 public interface DribbbleShotsInterface {
     @GET("shots")
     Call<List<Shot>> getShots(@Query("access_token") String key, @Query("page") int page);
+
+    @GET("shots/{id}/")
+    Call<Shot> getShot (@Path("id") int id,@Query("access_token") String key);
 }

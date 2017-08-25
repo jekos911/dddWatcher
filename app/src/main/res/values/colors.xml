@@ -6,4 +6,5 @@
     <color name="colorTextBackground">#55000000</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorText">#000000</color>
 </resources>

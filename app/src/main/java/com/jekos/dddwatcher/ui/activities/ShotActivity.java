@@ -1,4 +1,4 @@
-package com.jekos.dddwatcher.ui;
+package com.jekos.dddwatcher.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,4 +29,6 @@ public class ShotActivity extends AppCompatActivity {
         intent.putExtra(ARGUMENT_URL,url);
         return intent;
     }
+
+
 }

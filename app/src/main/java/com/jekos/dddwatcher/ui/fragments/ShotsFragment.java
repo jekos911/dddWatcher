@@ -1,4 +1,4 @@
-package com.jekos.dddwatcher.ui;
+package com.jekos.dddwatcher.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,14 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.jekos.dddwatcher.BuildConfig;
 import com.jekos.dddwatcher.R;
 import com.jekos.dddwatcher.api.interfaces.DribbbleShotsInterface;
 import com.jekos.dddwatcher.api.servicegenerators.MyShotsServiceGenerator;
-import com.jekos.dddwatcher.generator.TextViewTagGenerator;
 import com.jekos.dddwatcher.models.Shot;
 
 import com.jekos.dddwatcher.recyclerutil.PaginationScrollListner;
@@ -60,6 +58,7 @@ public class ShotsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.shots_fragment,container,false);
         recycler = (RecyclerView) view.findViewById(R.id.recyclerShots);
+        setRetainInstance(true);
         progressBar = (ProgressBar) view.findViewById(R.id.main_progress);
         shotsAdapter = new ShotsAdapter((ShotClickListner) getActivity());
         linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
