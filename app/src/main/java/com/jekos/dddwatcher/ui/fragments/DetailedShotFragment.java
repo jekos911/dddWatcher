@@ -1,12 +1,18 @@
 package com.jekos.dddwatcher.ui.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +26,8 @@ import com.jekos.dddwatcher.api.interfaces.DribbbleShotsInterface;
 import com.jekos.dddwatcher.api.servicegenerators.MyShotsServiceGenerator;
 import com.jekos.dddwatcher.generator.TextViewTagGenerator;
 import com.jekos.dddwatcher.models.Shot;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +43,8 @@ public class DetailedShotFragment extends Fragment {
     private TextView description;
     private ImageView userAvarar;
     private ImageView shotImage;
-    LinearLayout linearLayout;
+    private LinearLayout linearLayout;
+    private Button share;
 
     private int shotId;
     private Shot shot;
@@ -52,12 +61,32 @@ public class DetailedShotFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.shot_detail_fragment,container,false);
+        final View view = inflater.inflate(R.layout.shot_detail_fragment,container,false);
+
+        share = view.findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT,description.getText() + "\n\nСсылка на запись с сайта dribbble.com: " + shot.getHtml_url());
+                //intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(shot.getImages().get("normal")));
+                /*if (shot.isAnimated())
+                    intent.setType("image/gif");
+                else
+                    intent.setType("image/jpg");
+                */
+                intent.setType("text/plain");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(intent,"Send"));
+            }
+        });
 
         userName= (TextView) view.findViewById(R.id.username_shot_detail);
         description = (TextView) view.findViewById(R.id.detail_shot_description);
+        description.setMovementMethod(LinkMovementMethod.getInstance());
+
         userAvarar = (ImageView) view.findViewById(R.id.imageuser_detail_shot);
         shotImage = (ImageView) view.findViewById(R.id.image_detail_shot);
         linearLayout = (LinearLayout) view.findViewById(R.id.linear_tags);
@@ -68,24 +97,41 @@ public class DetailedShotFragment extends Fragment {
             public void onResponse(Call<Shot> call, Response<Shot> response) {
                 if (response.body() != null) {
                     shot = response.body();
-                    Log.d("XYU",response.message());
+                    Log.d("response message",response.message());
 
                     userName.setText(shot.getUser().getName());
-                    description.setText(shot.getDescription());
+                    if (shot.getDescription()!=null)
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            description.setText(Html.fromHtml(shot.getDescription(),Html.FROM_HTML_MODE_LEGACY));
+                        }
+                        else
+                        {
+                            description.setText(Html.fromHtml(shot.getDescription()));
+                        }
                     Glide.with(shotImage.getContext())
                             .load(shot.getImages().get("hidpi"))
                             .into(shotImage);
-                    Log.d("XUI",new Gson().toJson(response));
+                    Log.d("response to json",new Gson().toJson(response));
                     Glide.with(shotImage.getContext())
                             .load(shot.getUser().getAvatar_url())
                             .apply(RequestOptions.circleCropTransform())
                             .into(userAvarar);
                 }
+
+
+                List<String> tags = shot.getTags();
+                if ((tags != null) &&(tags.size()!=0))
                 for (String tag:shot.getTags()) {
                     linearLayout.addView(TextViewTagGenerator.getTextViewTag(LayoutInflater.from(getActivity()),getActivity(),tag));
                     TextView rre = new TextView(getActivity());
-                    rre.setText(", ");
+                    rre.setText(" ");
                     linearLayout.addView(rre);
+                }
+                else
+                {
+                    CardView card = (CardView) view.findViewById(R.id.card_tags);
+                    card.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.GONE);
                 }
             }
 

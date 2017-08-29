@@ -24,6 +24,7 @@ import com.jekos.dddwatcher.recyclerutil.ShotsAdapter;
 
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +40,7 @@ public class ShotsFragment extends Fragment {
     private RecyclerView recycler;
     private ProgressBar progressBar;
 
-
+    Realm realm;
 
     private ShotsAdapter shotsAdapter;
     LinearLayoutManager linearLayoutManager;
@@ -56,6 +57,8 @@ public class ShotsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Realm.init(getActivity());
+        realm = Realm.getDefaultInstance();
         View view = inflater.inflate(R.layout.shots_fragment,container,false);
         recycler = (RecyclerView) view.findViewById(R.id.recyclerShots);
         setRetainInstance(true);

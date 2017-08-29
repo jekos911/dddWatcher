@@ -15,7 +15,6 @@ public class TextViewTagGenerator {
     public static TextView getTextViewTag(LayoutInflater layoutInflater, Context context, String text)
     {
         TextView textView = (TextView) layoutInflater.inflate(R.layout.textviewtag,null,false);
-        textView.setBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         textView.setText(text);
         return  textView;
     }

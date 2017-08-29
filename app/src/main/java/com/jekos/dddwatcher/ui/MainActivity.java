@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements ShotClickListner{
 
     private FragmentManager fragmentManager = null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
