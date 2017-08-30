@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="@dimen/material_margin"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical"
-    app:cardElevation="4dp">
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textSize="@dimen/material_text_size"
                 tools:text="AVRAAM LINKOLN" />
 
         </LinearLayout>
@@ -67,7 +68,7 @@
                 android:background="@color/colorTextBackground"
                 android:gravity="center_horizontal"
                 android:textColor="@color/colorWhite"
-                android:textSize="16dp"
+                android:textSize="@dimen/material_text_size"
                 tools:text="rainy weather" />
 
 
@@ -95,7 +96,7 @@
                     android:id="@+id/likes_bottom_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100" />
+                    tools:text="100" />
             </LinearLayout>
 
             <LinearLayout
