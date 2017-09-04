@@ -38,6 +38,9 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public ShotsAdapter(ShotClickListner clickListner) {
         this.clickListner = clickListner;
         shotsLab = ShotsLab.getShotsLab();
+        if (shotsLab.getShots().size() != 0)
+        if (shotsLab.getShots().get(shotsLab.getShots().size() - 1).getUser() == null)  // FIXME: 05.09.2017
+            isLoadingAdded = true;
     }
 
     @Override

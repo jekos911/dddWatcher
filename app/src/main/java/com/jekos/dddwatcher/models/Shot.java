@@ -22,6 +22,11 @@ public class Shot {
     private boolean animated;
     private User user;
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
     public int getId() {
         return id;
     }
