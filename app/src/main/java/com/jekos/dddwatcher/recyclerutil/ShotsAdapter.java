@@ -42,14 +42,11 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Log.d("Position", Integer.toString(position));
         switch (getItemViewType(position)) {
 
             case ITEM:
                 ShotsViewHolder shotsVH = (ShotsViewHolder) holder;
-                Log.d("Pre getting shot", Integer.toString(position));
                 Shot shot = shotsLab.getShots().get(position);
-                Log.d("Post getting shot", Integer.toString(position));
 
                 if (shot != null) {
 

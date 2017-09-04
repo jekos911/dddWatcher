@@ -2,4 +2,6 @@
     <string name="app_name">dddWatcher</string>
     <string name="share">Share</string>
     <string name="tags">Tags</string>
+    <string name="share_text">Смотри, что я нашел на Dribbble!\n\nСсылка на запись с сайта dribbble.com: </string>
+    <string name="share_header">Поделиться в...</string>
 </resources>

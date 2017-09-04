@@ -30,21 +30,20 @@ public class ShotsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     public ShotsViewHolder(final View itemView) {
         super(itemView);
-        imageShot =  itemView.findViewById(R.id.list_shots_image);
+        imageShot = itemView.findViewById(R.id.list_shots_image);
         titleShot = itemView.findViewById(R.id.list_shots_title);
-        likes =  itemView.findViewById(R.id.likes_bottom_bar);
+        likes = itemView.findViewById(R.id.likes_bottom_bar);
         views = itemView.findViewById(R.id.views_bottom_bar);
-        comments =  itemView.findViewById(R.id.comments_bottom_bar);
+        comments = itemView.findViewById(R.id.comments_bottom_bar);
         isGif = itemView.findViewById(R.id.shots_gif);
-        userAvatar =  itemView.findViewById(R.id.user_avatar);
+        userAvatar = itemView.findViewById(R.id.user_avatar);
         userName = itemView.findViewById(R.id.user_name);
         itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (clickListner != null && shot != null)
-        {
+        if (clickListner != null && shot != null) {
             clickListner.onClick(shot);
         }
     }

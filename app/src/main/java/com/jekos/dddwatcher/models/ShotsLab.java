@@ -18,7 +18,6 @@ public class ShotsLab {
 
     public boolean isEmpty() {
         return (shots.isEmpty());
-
     }
 
     public List<Shot> getShots() {

@@ -78,10 +78,10 @@ public class DetailedShotFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, "Смотри, что я нашел на Dribbble!\n\nСсылка на запись с сайта dribbble.com: " + shot.getHtml_url());
+                intent.putExtra(Intent.EXTRA_TEXT,getResources().getString(R.string.share_text) + shot.getHtml_url());
                 intent.setType("text/plain");
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(intent, "Send"));
+                startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_header)));
             }
         });
 
@@ -123,7 +123,7 @@ public class DetailedShotFragment extends Fragment {
                 linearLayout.addView(rre);
             }
         else {
-            CardView card = (CardView) view.findViewById(R.id.card_tags);
+            CardView card = view.findViewById(R.id.card_tags);
             card.setVisibility(View.GONE);
             linearLayout.setVisibility(View.GONE);
         }
