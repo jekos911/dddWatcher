@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.jekos.dddwatcher.BuildConfig;
 import com.jekos.dddwatcher.R;
@@ -39,30 +40,27 @@ public class ShotsFragment extends Fragment {
     private List<Shot> shots;
     private RecyclerView recycler;
     private ProgressBar progressBar;
-
-    Realm realm;
+    private static boolean wasFirstLoad = false;
 
     private ShotsAdapter shotsAdapter;
-    LinearLayoutManager linearLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
 
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
     private boolean isLastPage = false;
-    private int TOTAL_PAGES = 3;
+    private static final int TOTAL_PAGES = 3;
     private int currentPage = PAGE_START;
 
-    DribbbleShotsInterface shotsInterface;
+    private DribbbleShotsInterface shotsInterface;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Realm.init(getActivity());
-        realm = Realm.getDefaultInstance();
         View view = inflater.inflate(R.layout.shots_fragment,container,false);
-        recycler = (RecyclerView) view.findViewById(R.id.recyclerShots);
+        recycler = view.findViewById(R.id.recyclerShots);
         setRetainInstance(true);
-        progressBar = (ProgressBar) view.findViewById(R.id.main_progress);
+        progressBar =  view.findViewById(R.id.main_progress);
         shotsAdapter = new ShotsAdapter((ShotClickListner) getActivity());
         linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recycler.setLayoutManager(linearLayoutManager);
@@ -80,22 +78,24 @@ public class ShotsFragment extends Fragment {
 
             @Override
             public int getTotalPageCount() {
-                return 0;
+                return TOTAL_PAGES;
             }
 
             @Override
             public boolean isLastPage() {
-                return false;
+                return currentPage >= TOTAL_PAGES;
             }
 
             @Override
             public boolean isLoading() {
-                return false;
+                return isLoading;
             }
         });
         shotsInterface = MyShotsServiceGenerator.createService(DribbbleShotsInterface.class);
-        loadFirstPage();
-
+        if (!wasFirstLoad) {
+            loadFirstPage();
+            wasFirstLoad = true;
+        }
         return view;
     }
 
@@ -113,14 +113,14 @@ public class ShotsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Shot>> call, Throwable t) {
-
+                error();
             }
         });
-
-
     }
 
     private void loadNextPage() {
+        Log.d("Current page ", Integer.toString(currentPage));
+        Log.d("Total page ", Integer.toString(TOTAL_PAGES));
         Log.d("MAINACTIVITY", "loadNextPage: " + currentPage);
         shotsInterface.getShots(BuildConfig.API_ACCESS_TOKEN,currentPage).enqueue(new Callback<List<Shot>>() {
             @Override
@@ -129,14 +129,19 @@ public class ShotsFragment extends Fragment {
                 shotsAdapter.removeLoadingFooter();
                 isLoading = false;
                 shotsAdapter.addAll(shots);
-                if (currentPage <=TOTAL_PAGES) shotsAdapter.addLoadingFooter();
+                if (currentPage < TOTAL_PAGES) shotsAdapter.addLoadingFooter();
                 else isLastPage = true;
             }
 
             @Override
             public void onFailure(Call<List<Shot>> call, Throwable t) {
-
+                error();
             }
         });
+    }
+
+    private void error()
+    {
+        Toast.makeText(getActivity(),"Check your internet connection",Toast.LENGTH_SHORT).show();
     }
 }

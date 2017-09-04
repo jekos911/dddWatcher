@@ -1,8 +1,10 @@
 package com.jekos.dddwatcher.recyclerutil;
 
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jekos.dddwatcher.R;
 import com.jekos.dddwatcher.models.Shot;
+import com.jekos.dddwatcher.models.ShotsLab;
 
 
 import java.util.ArrayList;
@@ -27,46 +30,49 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int LOADING = 1;
 
     private boolean isLoadingAdded = false;
-    private List<Shot> shotList = null;
+
+    private ShotsLab shotsLab;
 
     private ShotClickListner clickListner;
 
     public ShotsAdapter(ShotClickListner clickListner) {
-        this.shotList = new ArrayList<>();
         this.clickListner = clickListner;
-
-
+        shotsLab = ShotsLab.getShotsLab();
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.d("Position", Integer.toString(position));
         switch (getItemViewType(position)) {
-            case ITEM:
-                final ShotsViewHolder shotsVH = (ShotsViewHolder) holder;
-                final Shot shot = shotList.get(position);
 
-                if (shot.isAnimated()) {
-                    Glide.with(shotsVH.imageShot.getContext())
-                            .load(shot.getImages().get("normal"))
-                            .into(shotsVH.imageShot);
+            case ITEM:
+                ShotsViewHolder shotsVH = (ShotsViewHolder) holder;
+                Log.d("Pre getting shot", Integer.toString(position));
+                Shot shot = shotsLab.getShots().get(position);
+                Log.d("Post getting shot", Integer.toString(position));
+
+                if (shot != null) {
+
+                    if (shot.isAnimated()) {
+                        Log.d("anim", Integer.toString(position));
+                        Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
+                    } else {
+                        Log.d("nonainm", Integer.toString(position));
+                        Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
+                    }
+
+                    Glide.with(shotsVH.imageShot.getContext()).load(shot.getUser().getAvatar_url())
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(shotsVH.userAvatar);
+                    shotsVH.userName.setText(shot.getUser().getName());
+                    shotsVH.titleShot.setText(shot.getTitle());
+                    shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
+                    shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));
+                    shotsVH.views.setText(Integer.toString(shot.getViews_count()));
+                    shotsVH.clickListner = clickListner;
+                    shotsVH.shot = shot;
+                    shotsVH.isGif.setVisibility(shot.isAnimated() ? View.VISIBLE : View.INVISIBLE);
                 }
-                else {
-                    Glide.with(shotsVH.imageShot.getContext())
-                            .load(shot.getImages().get("hidpi"))
-                            .into(shotsVH.imageShot);
-                }
-                Glide.with(shotsVH.imageShot.getContext())
-                        .load(shot.getUser().getAvatar_url())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(shotsVH.userAvatar);
-                shotsVH.userName.setText(shot.getUser().getName());
-                shotsVH.titleShot.setText(shot.getTitle());
-                shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
-                shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));
-                shotsVH.views.setText(Integer.toString(shot.getViews_count()));
-                shotsVH.clickListner = clickListner;
-                shotsVH.shot = shot;
-                shotsVH.isGif.setVisibility(shot.isAnimated()?View.VISIBLE:View.INVISIBLE);
                 break;
             case LOADING:
 //                Do nothing
@@ -76,17 +82,17 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return shotList.size();
+        return shotsLab.getShots().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == shotList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        return (position == shotsLab.getShots().size() - 1 && isLoadingAdded) ? LOADING : ITEM;
     }
 
     public void add(Shot mc) {
-       shotList.add(mc);
-        notifyItemInserted(shotList.size() - 1);
+        shotsLab.getShots().add(mc);
+        notifyItemInserted(shotsLab.getShots().size() - 1);
     }
 
     public void addAll(List<Shot> mcList) {
@@ -96,9 +102,9 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void remove(Shot city) {
-        int position = shotList.indexOf(city);
+        int position = shotsLab.getShots().indexOf(city);
         if (position > -1) {
-            shotList.remove(position);
+            shotsLab.getShots().remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -122,17 +128,17 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = shotList.size() - 1;
-       Shot item = getItem(position);
+        int position = shotsLab.getShots().size() - 1;
+        Shot item = getItem(position);
 
         if (item != null) {
-            shotList.remove(position);
+            shotsLab.getShots().remove(position);
             notifyItemRemoved(position);
         }
     }
 
     public Shot getItem(int position) {
-        return shotList.get(position);
+        return shotsLab.getShots().get(position);
     }
 
     @Override

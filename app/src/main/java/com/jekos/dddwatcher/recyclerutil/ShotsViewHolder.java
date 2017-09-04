@@ -30,24 +30,22 @@ public class ShotsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     public ShotsViewHolder(final View itemView) {
         super(itemView);
-        imageShot = (ImageView) itemView.findViewById(R.id.list_shots_image);
-        titleShot = (TextView) itemView.findViewById(R.id.list_shots_title);
-        likes = (TextView) itemView.findViewById(R.id.likes_bottom_bar);
-        views = (TextView) itemView.findViewById(R.id.views_bottom_bar);
-        comments = (TextView) itemView.findViewById(R.id.comments_bottom_bar);
-        isGif = (TextView) itemView.findViewById(R.id.shots_gif);
-        userAvatar = (ImageView) itemView.findViewById(R.id.user_avatar);
-        userName = (TextView) itemView.findViewById(R.id.user_name);
+        imageShot =  itemView.findViewById(R.id.list_shots_image);
+        titleShot = itemView.findViewById(R.id.list_shots_title);
+        likes =  itemView.findViewById(R.id.likes_bottom_bar);
+        views = itemView.findViewById(R.id.views_bottom_bar);
+        comments =  itemView.findViewById(R.id.comments_bottom_bar);
+        isGif = itemView.findViewById(R.id.shots_gif);
+        userAvatar =  itemView.findViewById(R.id.user_avatar);
+        userName = itemView.findViewById(R.id.user_name);
         itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        Log.d("ONCLICK", (clickListner!=null)?"nonnull":"null");
         if (clickListner != null && shot != null)
         {
             clickListner.onClick(shot);
-            Log.d("ONCLICK","CHEBUREK");
         }
     }
 }

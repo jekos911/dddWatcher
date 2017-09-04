@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements ShotClickListner{
             fragmentManager.beginTransaction()
             .add(R.id.container,new ShotsFragment())
             .commit();
+
+        long i = 0;
+        Long.toString(i);
+
     }
 
     @Override
