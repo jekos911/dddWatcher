@@ -90,6 +90,8 @@ public class ShotsFragment extends Fragment {
         recycler = view.findViewById(R.id.recyclerShots);
         //setRetainInstance(true);
         progressBar = view.findViewById(R.id.main_progress);
+        if (wasFirstLoad)
+            progressBar.setVisibility(View.GONE);
         shotsAdapter = new ShotsAdapter((ShotClickListner) getActivity());
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recycler.setLayoutManager(linearLayoutManager);

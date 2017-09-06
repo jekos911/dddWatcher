@@ -49,6 +49,8 @@ public class DetailedShotFragment extends Fragment {
     private Button share;
     private ShotsLab shotsLab;
     private LinearLayout containerDetail;
+    private CardView descriptionCard;
+    private CardView tagsCard;
 
 
     private int shotId;
@@ -85,6 +87,7 @@ public class DetailedShotFragment extends Fragment {
             }
         });
 
+        descriptionCard = view.findViewById(R.id.card_description);
         userName = view.findViewById(R.id.username_shot_detail);
         description = view.findViewById(R.id.detail_shot_description);
         description.setMovementMethod(LinkMovementMethod.getInstance());
@@ -106,6 +109,10 @@ public class DetailedShotFragment extends Fragment {
             } else {
                 description.setText(Html.fromHtml(shot.getDescription()));
             }
+            else
+        {
+            descriptionCard.setVisibility(View.GONE);
+        }
         Glide.with(shotImage.getContext())
                 .load(shot.getImages().get("hidpi"))
                 .into(shotImage);
@@ -113,6 +120,8 @@ public class DetailedShotFragment extends Fragment {
                 .load(shot.getUser().getAvatar_url())
                 .apply(RequestOptions.circleCropTransform())
                 .into(userAvarar);
+
+
 
         List<String> tags = shot.getTags();
         if ((tags != null) && (tags.size() != 0))
