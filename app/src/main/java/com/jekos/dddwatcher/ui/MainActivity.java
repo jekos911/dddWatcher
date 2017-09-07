@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity implements ShotClickListner{
 
     private FragmentManager fragmentManager = null;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,16 +24,10 @@ public class MainActivity extends AppCompatActivity implements ShotClickListner{
             fragmentManager.beginTransaction()
             .add(R.id.container,new ShotsFragment())
             .commit();
-
-        long i = 0;
-        Long.toString(i);
-
     }
 
     @Override
     public void onClick(Shot shot) {
-        //Intent intent = ShotActivity.getNewIntent(shot.getHtml_url(),this);
-        //startActivity(intent);
         setContent(shot.getId());
     }
 
@@ -42,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ShotClickListner{
     {
         fragmentManager.beginTransaction()
                 .replace(R.id.container,DetailedShotFragment.newInstance(id))
-                .addToBackStack("SALDJL")
+                .addToBackStack(getResources().getString(R.string.transaction))
                 .commit();
     }
 }

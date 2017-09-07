@@ -39,44 +39,35 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.clickListner = clickListner;
         shotsLab = ShotsLab.getShotsLab();
         if (shotsLab.getShots().size() != 0)
-        if (shotsLab.getShots().get(shotsLab.getShots().size() - 1).getUser() == null)  // FIXME: 05.09.2017
-            isLoadingAdded = true;
+            if (shotsLab.getShots().get(shotsLab.getShots().size() - 1).getUser() == null)  // FIXME: 05.09.2017
+                isLoadingAdded = true;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (getItemViewType(position)) {
-
-            case ITEM:
+        if  (getItemViewType(position) == ITEM) {
                 ShotsViewHolder shotsVH = (ShotsViewHolder) holder;
                 Shot shot = shotsLab.getShots().get(position);
 
-                if (shot != null) {
-
-                    if (shot.isAnimated()) {
-                        Log.d("anim", Integer.toString(position));
-                        Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
-                    } else {
-                        Log.d("nonainm", Integer.toString(position));
-                        Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
-                    }
-
-                    Glide.with(shotsVH.imageShot.getContext()).load(shot.getUser().getAvatar_url())
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(shotsVH.userAvatar);
-                    shotsVH.userName.setText(shot.getUser().getName());
-                    shotsVH.titleShot.setText(shot.getTitle());
-                    shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
-                    shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));
-                    shotsVH.views.setText(Integer.toString(shot.getViews_count()));
-                    shotsVH.clickListner = clickListner;
-                    shotsVH.shot = shot;
-                    shotsVH.isGif.setVisibility(shot.isAnimated() ? View.VISIBLE : View.INVISIBLE);
+                if (shot.isAnimated()) {
+                    Log.d("anim", Integer.toString(position));
+                    Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("normal")).into(shotsVH.imageShot);
+                } else {
+                    Log.d("nonainm", Integer.toString(position));
+                    Glide.with(shotsVH.imageShot.getContext()).load(shot.getImages().get("hidpi")).into(shotsVH.imageShot);
                 }
-                break;
-            case LOADING:
-//                Do nothing
-                break;
+
+                Glide.with(shotsVH.imageShot.getContext()).load(shot.getUser().getAvatar_url())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(shotsVH.userAvatar);
+                shotsVH.userName.setText(shot.getUser().getName());
+                shotsVH.titleShot.setText(shot.getTitle());
+                shotsVH.comments.setText(Integer.toString(shot.getComments_count()));
+                shotsVH.likes.setText(Integer.toString(shot.getLikes_count()));
+                shotsVH.views.setText(Integer.toString(shot.getViews_count()));
+                shotsVH.clickListner = clickListner;
+                shotsVH.shot = shot;
+                shotsVH.isGif.setVisibility(shot.isAnimated() ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -143,19 +134,10 @@ public class ShotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-        switch (viewType) {
-            case ITEM:
-                viewHolder = getViewHolder(parent, inflater);
-                break;
-            case LOADING:
-                View v2 = inflater.inflate(R.layout.item_progress, parent, false);
-                viewHolder = new LoadingVH(v2);
-                break;
-        }
-        return viewHolder;
+       if (viewType == ITEM)
+                return getViewHolder(parent, inflater);
+        return new LoadingVH(inflater.inflate(R.layout.item_progress, parent, false));
     }
 
     @NonNull

@@ -57,8 +57,6 @@ public class ShotsFragment extends Fragment {
     private boolean isLoading = false;
     private boolean isLastPage;
 
-
-
     private DribbbleShotsInterface shotsInterface;
 
     @Override
@@ -88,7 +86,6 @@ public class ShotsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.shots_fragment, container, false);
         recycler = view.findViewById(R.id.recyclerShots);
-        //setRetainInstance(true);
         progressBar = view.findViewById(R.id.main_progress);
         if (wasFirstLoad)
             progressBar.setVisibility(View.GONE);
@@ -130,24 +127,18 @@ public class ShotsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("isLastPage",Boolean.toString(isLastPage));
-        Log.d("cur page", Integer.toString(currentPage));
-        Log.d("shots_count1", Integer.toString(ShotsLab.getShotsLab().getShots().size()));
-    }
 
     private void loadFirstPage() {
-        Log.d("MAINACTIVITY", "loadFirstPage: ");
 
         shotsInterface.getShots(BuildConfig.API_ACCESS_TOKEN, PAGE_START).enqueue(new Callback<List<Shot>>() {
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
-                progressBar.setVisibility(View.GONE);
-                shotsAdapter.addAll(response.body());
-                if (currentPage <= TOTAL_PAGES) shotsAdapter.addLoadingFooter();
-                else isLastPage = true;
+                if (response.body() != null) {
+                    progressBar.setVisibility(View.GONE);
+                    shotsAdapter.addAll(response.body());
+                    if (currentPage <= TOTAL_PAGES) shotsAdapter.addLoadingFooter();
+                    else isLastPage = true;
+                }
             }
 
             @Override
@@ -161,12 +152,14 @@ public class ShotsFragment extends Fragment {
         shotsInterface.getShots(BuildConfig.API_ACCESS_TOKEN, currentPage).enqueue(new Callback<List<Shot>>() {
             @Override
             public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
-                shots = response.body();
-                shotsAdapter.removeLoadingFooter();
-                isLoading = false;
-                shotsAdapter.addAll(shots);
-                if (currentPage < TOTAL_PAGES) shotsAdapter.addLoadingFooter();
-                else isLastPage = true;
+                if (response.body() != null) {
+                    shots = response.body();
+                    shotsAdapter.removeLoadingFooter();
+                    isLoading = false;
+                    shotsAdapter.addAll(shots);
+                    if (currentPage < TOTAL_PAGES) shotsAdapter.addLoadingFooter();
+                    else isLastPage = true;
+                }
             }
 
             @Override
@@ -177,6 +170,6 @@ public class ShotsFragment extends Fragment {
     }
 
     private void error() {
-        Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
     }
 }

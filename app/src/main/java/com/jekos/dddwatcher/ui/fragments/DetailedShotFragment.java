@@ -126,10 +126,10 @@ public class DetailedShotFragment extends Fragment {
         List<String> tags = shot.getTags();
         if ((tags != null) && (tags.size() != 0))
             for (String tag : shot.getTags()) {
-                linearLayout.addView(TextViewTagGenerator.getTextViewTag(LayoutInflater.from(getActivity()), getActivity(), tag));
-                TextView rre = new TextView(getActivity());
-                rre.setText(" ");
-                linearLayout.addView(rre);
+                linearLayout.addView(TextViewTagGenerator.getTextViewTag(LayoutInflater.from(getActivity()), tag));
+                TextView spaceText = new TextView(getActivity());
+                spaceText.setText(" ");
+                linearLayout.addView(spaceText);
             }
         else {
             CardView card = view.findViewById(R.id.card_tags);
